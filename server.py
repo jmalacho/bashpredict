@@ -5,11 +5,22 @@ from flask import Flask,jsonify,request
 app = Flask(__name__)
 from flask import abort
 
+BH=mlBashHistory.ModelPredict()
 
-@app.route('/add', methods=['POST', 'GET'])
+@app.route('/add', methods=['POST'])
 def add():
-    if request.method == 'POST':
-        return jsonify( request.form ) 
+  if request.method == 'POST':
+     f=request.form
+     if "data" in f:
+       BH.addNgramsFromString( f["data"] )
+       return jsonify({"status":"success"})
+     else: pass
+       #TODO throw bad argument error  
+  return jsonify({"status":"failure"})
+
+@app.route('/status', methods=['GET'])
+def status():
+  return jsonify({ "count": BH.status() })
 
 @app.route('/postdebug', methods=['POST', 'GET'])
 def postdebug():

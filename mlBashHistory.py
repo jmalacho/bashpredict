@@ -61,6 +61,10 @@ class ModelPredict:
   def calcModel(self):
     for key, counterDict in self.data.iteritems():
       self.model[key]=keyByMaxValue( counterDict )
+
+  def update(self):
+    self.calcModel()
+    return "success"
   
   def predict(self, word):
     t=type(word)

@@ -22,12 +22,33 @@ def add():
 def status():
   return jsonify({ "count": BH.status() })
 
+@app.route('/update', methods=['GET'])
+def update():
+  return jsonify({ "status": BH.update() })
+
+@app.route('/predict', methods=['GET'])
+def predict():
+   word=request.args["q"]
+   return jsonify( { "response": BH.predict( word ) } ) 
+
 @app.route('/postdebug', methods=['POST', 'GET'])
 def postdebug():
-    print "Here"
+   print request.headers
+   if request.method == 'POST':
+      return jsonify( { 
+         "form": request.form,
+         "args": request.args,
+         "values": request.values,
+         "data": request.data,
+         "is_json": request.is_json,
+#         "get_json": request.get_json,
+#         "headers": request.headers
+       }) 
+
+@app.route('/getdebug', methods=['GET'])
+def getdebug():
     print request.headers
-    if request.method == 'POST':
-	return jsonify( { 
+    return jsonify( { 
           "form": request.form,
           "args": request.args,
           "values": request.values,
@@ -35,11 +56,14 @@ def postdebug():
           "is_json": request.is_json,
 #          "get_json": request.get_json,
 #          "headers": request.headers
-        }) 
+       })  
 
-@app.route('/predict/<string:word>', methods=['GET'])
-def predict( word ):
-  return jsonify({'word':word})
+
+
+
+#@app.route('/predict/<string:word>', methods=['GET'])
+#def predict( word ):
+#  return jsonify({'word':word})
 
 
 @app.route('/hello')

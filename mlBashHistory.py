@@ -35,6 +35,16 @@ class ModelPredict:
           for ngram in ngrams:
             self.addNgram( ngram)
 
+  def addNgramsFromString( self, s ):
+    try:
+      lexical_split=shlex.split( s )
+    except ValueError:
+      lexical_split=False
+    if lexical_split:
+      ngrams = nltk.ngrams( lexical_split, 2, pad_left=True, pad_right=True, left_pad_symbol="<s>", right_pad_symbol=self.rps )
+      for ngram in ngrams:
+        self.addNgram( ngram )
+
   def addNgram(self, ngram):
     key1 = ngram[0:self.order-1]          #leading word, as tuples
     key2 = ngram[self.order-1:self.order][0]  #final/predicted word, as string
@@ -51,16 +61,25 @@ class ModelPredict:
   def calcModel(self):
     for key, counterDict in self.data.iteritems():
       self.model[key]=keyByMaxValue( counterDict )
+
+  def update(self):
+    self.calcModel()
+    return "success"
   
   def predict(self, word):
     t=type(word)
     if t==str:
        key=(word,)
+    elif t==unicode:
+       key=(str(word),)
     elif t==tuple:
        key=word
     else:
-       raise TypeError, "predict requires a str or a tuple. Got %s" % v
+       raise TypeError, "predict requires a str or a tuple. Got %s" % t
     return self.model.get(key, self.rps)
+  
+  def status( self ):
+    return len( self.data )
 
   def __str__(self):
     return self.model.__str__()

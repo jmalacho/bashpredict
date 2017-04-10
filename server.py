@@ -59,8 +59,6 @@ def getdebug():
        })  
 
 
-
-
 #@app.route('/predict/<string:word>', methods=['GET'])
 #def predict( word ):
 #  return jsonify({'word':word})

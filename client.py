@@ -32,7 +32,7 @@ if args.update:
 
 if args.query:
   payload={ "q": args.query }
-  r = requests.get( args.server + "/getdebug", params=payload )
   r = requests.get( args.server + "/predict", params=payload )
   print r.text
 
+#  r = requests.get( args.server + "/getdebug", params=payload )

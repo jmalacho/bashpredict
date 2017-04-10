@@ -70,10 +70,12 @@ class ModelPredict:
     t=type(word)
     if t==str:
        key=(word,)
+    elif t==unicode:
+       key=(str(word),)
     elif t==tuple:
        key=word
     else:
-       raise TypeError, "predict requires a str or a tuple. Got %s" % v
+       raise TypeError, "predict requires a str or a tuple. Got %s" % t
     return self.model.get(key, self.rps)
   
   def status( self ):
